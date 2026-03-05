@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripAdvisor Gateway API — Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2236;
+    --border: #1e2d45;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --green: #10b981;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --code-bg: #0d1117;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 280px;
+    min-width: 280px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-logo {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .logo-dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .logo-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .version-tag {
+    display: inline-block;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 6px;
+  }
+
+  .nav-section {
+    padding: 20px 0 8px;
+  }
+
+  .nav-section-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 24px 8px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 24px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 14px;
+    border-left: 3px solid transparent;
+  }
+
+  .nav-item:hover {
+    background: rgba(255,255,255,0.03);
+    color: var(--text);
+  }
+
+  .nav-item.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: rgba(0, 212, 255, 0.05);
+  }
+
+  .method-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 3px;
+    min-width: 34px;
+    text-align: center;
+  }
+
+  .get { background: rgba(16, 185, 129, 0.15); color: var(--green); }
+  .post { background: rgba(124, 58, 237, 0.15); color: #a78bfa; }
+
+  /* MAIN */
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #0a0e1a 0%, #111827 50%, #0d1b2e 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 64px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 40%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(124,58,237,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.15);
+    color: var(--accent);
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    color: var(--muted);
+    font-size: 17px;
+    max-width: 580px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .content {
+    padding: 48px 64px;
+    max-width: 960px;
+  }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 64px;
+    scroll-margin-top: 32px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--surface2);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  /* ENDPOINT CARD */
+  .endpoint-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .endpoint-card:hover {
+    border-color: rgba(0,212,255,0.2);
+  }
+
+  .endpoint-header {
+    padding: 20px 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    user-select: none;
+  }
+
+  .endpoint-header:hover { background: rgba(255,255,255,0.02); }
+
+  .method-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    min-width: 48px;
+    text-align: center;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .endpoint-info { flex: 1; }
+
+  .endpoint-path {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .path-param { color: var(--accent); }
+
+  .endpoint-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .endpoint-tags {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .tag-composite {
+    background: rgba(124,58,237,0.15);
+    color: #a78bfa;
+    border: 1px solid rgba(124,58,237,0.2);
+  }
+
+  .tag-native {
+    background: rgba(16,185,129,0.1);
+    color: var(--green);
+    border: 1px solid rgba(16,185,129,0.15);
+  }
+
+  .tag-byok {
+    background: rgba(245,158,11,0.1);
+    color: var(--yellow);
+    border: 1px solid rgba(245,158,11,0.15);
+  }
+
+  .chevron {
+    color: var(--muted);
+    font-size: 12px;
+    transition: transform 0.2s;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+
+  .endpoint-body {
+    display: none;
+    padding: 0 24px 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .endpoint-body.open { display: block; }
+  .chevron.open { transform: rotate(180deg); }
+
+  /* PARAMS TABLE */
+  .params-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin: 20px 0 10px;
+  }
+
+  .params-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .params-table th {
+    text-align: left;
+    padding: 8px 12px;
+    background: var(--surface2);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .params-table th:first-child { border-radius: 6px 0 0 6px; }
+  .params-table th:last-child { border-radius: 0 6px 6px 0; }
+
+  .params-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .params-table tr:last-child td { border-bottom: none; }
+
+  .param-name {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    font-size: 13px;
+  }
+
+  .param-required {
+    font-size: 10px;
+    color: var(--red);
+    margin-left: 4px;
+    vertical-align: super;
+  }
+
+  .param-type {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #a78bfa;
+    background: rgba(124,58,237,0.08);
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+
+  .param-desc { color: var(--muted); line-height: 1.4; }
+
+  /* CODE BLOCK */
+  .code-tabs {
+    display: flex;
+    gap: 2px;
+    margin-top: 20px;
+    background: var(--code-bg);
+    border-radius: 10px 10px 0 0;
+    padding: 8px 8px 0;
+    border: 1px solid var(--border);
+    border-bottom: none;
+  }
+
+  .code-tab {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.15s;
+    border: none;
+    background: transparent;
+  }
+
+  .code-tab.active {
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: auto;
+    position: relative;
+  }
+
+  .code-content { display: none; }
+  .code-content.active { display: block; }
+
+  .copy-btn {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .copy-btn:hover { color: var(--text); border-color: var(--accent); }
+
+  .kw { color: #ff79c6; }
+  .str { color: #f1fa8c; }
+  .fn { color: #50fa7b; }
+  .var { color: #8be9fd; }
+  .cm { color: #6272a4; }
+  .num { color: #bd93f9; }
+  .key { color: var(--accent); }
+
+  /* RESPONSE EXAMPLE */
+  .response-block {
+    margin-top: 16px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .response-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .status-200 {
+    background: rgba(16,185,129,0.15);
+    color: var(--green);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+
+  .response-body {
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    overflow-x: auto;
+    max-height: 320px;
+    overflow-y: auto;
+  }
+
+  /* AUTH SECTION */
+  .auth-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .auth-box h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .auth-box p { color: var(--muted); font-size: 14px; margin-bottom: 12px; }
+
+  .inline-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    background: rgba(0,212,255,0.08);
+    color: var(--accent);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(0,212,255,0.12);
+  }
+
+  /* ERROR TABLE */
+  .error-row { display: flex; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .error-row:last-child { border-bottom: none; }
+  .error-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    min-width: 50px;
+  }
+  .e400 { color: var(--yellow); }
+  .e401 { color: var(--red); }
+  .e429 { color: #fb923c; }
+  .e500 { color: var(--red); }
+
+  /* PRICING */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .price-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .price-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .price-card.featured { border-color: var(--accent2); background: rgba(124,58,237,0.08); }
+
+  .price-plan {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+    color: var(--muted);
+  }
+
+  .price-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .price-period { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+
+  .price-requests {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .price-note { font-size: 12px; color: var(--muted); }
+
+  /* ONBOARDING STEPS */
+  .steps { display: flex; flex-direction: column; gap: 0; }
+
+  .step {
+    display: flex;
+    gap: 20px;
+    position: relative;
+    padding-bottom: 32px;
+  }
+
+  .step:last-child { padding-bottom: 0; }
+
+  .step-line {
+    position: absolute;
+    left: 19px; top: 40px;
+    width: 2px;
+    height: calc(100% - 20px);
+    background: var(--border);
+  }
+
+  .step:last-child .step-line { display: none; }
+
+  .step-num {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    flex-shrink: 0;
+    color: var(--accent);
+    z-index: 1;
+    position: relative;
+  }
+
+  .step-content h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    padding-top: 8px;
+  }
+
+  .step-content p { color: var(--muted); font-size: 13px; }
+
+  /* BASE URL */
+  .base-url-box {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .base-url-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    min-width: 80px;
+  }
+
+  .base-url-value { color: var(--accent); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ALERT */
+  .alert {
+    display: flex;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .alert-info {
+    background: rgba(0,212,255,0.07);
+    border: 1px solid rgba(0,212,255,0.15);
+    color: #a0d8ef;
+  }
+
+  .alert-warn {
+    background: rgba(245,158,11,0.07);
+    border: 1px solid rgba(245,158,11,0.15);
+    color: #fcd34d;
+  }
+
+  .alert-icon { font-size: 16px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-badge">
+      <div class="logo-dot"></div>
+      <span class="logo-text">TripAdvisor Gateway</span>
+    </div>
+    <div class="logo-title">API Reference</div>
+    <div class="version-tag">v1.0</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Getting Started</div>
+    <a class="nav-item active" href="#overview">
+      <span>📖</span> Overview
+    </a>
+    <a class="nav-item" href="#auth">
+      <span>🔑</span> Authentication
+    </a>
+    <a class="nav-item" href="#onboarding">
+      <span>🚀</span> Quick Start
+    </a>
+    <a class="nav-item" href="#errors">
+      <span>⚠️</span> Error Handling
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Endpoints</div>
+    <a class="nav-item" href="#ep-search">
+      <span class="method-badge get">GET</span> Location Search
+    </a>
+    <a class="nav-item" href="#ep-nearby">
+      <span class="method-badge get">GET</span> Nearby Search
+    </a>
+    <a class="nav-item" href="#ep-details">
+      <span class="method-badge get">GET</span> Location Details
+    </a>
+    <a class="nav-item" href="#ep-photos">
+      <span class="method-badge get">GET</span> Location Photos
+    </a>
+    <a class="nav-item" href="#ep-reviews">
+      <span class="method-badge get">GET</span> Location Reviews
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Composite Endpoints</div>
+    <a class="nav-item" href="#ep-full">
+      <span class="method-badge get">GET</span> Location Full
+    </a>
+    <a class="nav-item" href="#ep-searchfull">
+      <span class="method-badge get">GET</span> Search + Details
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Plans</div>
+    <a class="nav-item" href="#pricing">
+      <span>💳</span> Pricing
+    </a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">🌎 Powered by TripAdvisor Official API</div>
+    <h1>TripAdvisor<br>Gateway API</h1>
+    <p>Official TripAdvisor data with zero scraping instability. Bring your own API key and get access to hotels, restaurants, and attractions worldwide — in one clean, standardized interface.</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-value">7</div>
+        <div class="stat-label">Endpoints</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">8M+</div>
+        <div class="stat-label">Locations</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">45</div>
+        <div class="stat-label">Languages</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">50/s</div>
+        <div class="stat-label">Rate Limit</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- OVERVIEW -->
+    <div class="section" id="overview">
+      <div class="section-header">
+        <span class="section-number">01</span>
+        <h2 class="section-title">Overview</h2>
+      </div>
+
+      <p style="color:var(--muted); margin-bottom: 20px;">This API acts as a clean, standardized gateway to the <strong style="color:var(--text)">TripAdvisor Content API</strong>. Unlike scraping-based alternatives, every response comes directly from TripAdvisor's official infrastructure — meaning no breakage, no blocks, no stale data.</p>
+
+      <div class="alert alert-info">
+        <span class="alert-icon">ℹ️</span>
+        <div>This is a <strong>BYOK (Bring Your Own Key)</strong> API. You need a free TripAdvisor Partner API key to use it. See the <a href="#onboarding" style="color:var(--accent)">Quick Start</a> section to get yours in under 5 minutes.</div>
+      </div>
+
+      <div class="base-url-box">
+        <span class="base-url-label">Base URL</span>
+        <span class="base-url-value">https://your-api.p.rapidapi.com/v1</span>
+      </div>
+
+      <p style="color:var(--muted); font-size:14px;">All requests use <strong style="color:var(--text)">HTTPS</strong> and return <strong style="color:var(--text)">JSON</strong>. The TripAdvisor key is passed in every request via the <span class="inline-code">X-TripAdvisor-Key</span> header.</p>
+    </div>
+
+    <!-- AUTH -->
+    <div class="section" id="auth">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <h2 class="section-title">Authentication</h2>
+      </div>
+
+      <div class="auth-box">
+        <h3>🔐 RapidAPI Key</h3>
+        <p>Authenticate all requests with your RapidAPI subscription key in the header.</p>
+        <div style="display:flex;gap:24px;font-size:13px;">
+          <div>
+            <div style="color:var(--muted);font-size:11px;margin-bottom:4px;">HEADER</div>
+            <span class="inline-code">X-RapidAPI-Key</span>
+          </div>
+          <div>
+            <div style="color:var(--muted);font-size:11px;margin-bottom:4px;">VALUE</div>
+            <span class="inline-code">YOUR_RAPIDAPI_KEY</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-box">
+        <h3>🗝️ TripAdvisor Partner Key (BYOK)</h3>
+        <p>Pass your personal TripAdvisor Content API key in every request. It's free to obtain — see Quick Start below.</p>
+        <div style="display:flex;gap:24px;font-size:13px;">
+          <div>
+            <div style="color:var(--muted);font-size:11px;margin-bottom:4px;">HEADER</div>
+            <span class="inline-code">X-TripAdvisor-Key</span>
+          </div>
+          <div>
+            <div style="color:var(--muted);font-size:11px;margin-bottom:4px;">VALUE</div>
+            <span class="inline-code">YOUR_TA_PARTNER_KEY</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ONBOARDING -->
+    <div class="section" id="onboarding">
+      <div class="section-header">
+        <span class="section-number">03</span>
+        <h2 class="section-title">Quick Start</h2>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-line"></div>
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Create a TripAdvisor Developer Account</h4>
+            <p>Go to <span class="inline-code">tripadvisor.com/developers</span> and sign up for free. No credit card required for the Partner API.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-line"></div>
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Generate your API Key</h4>
+            <p>In the developer dashboard, navigate to <strong>Credentials</strong> and create a new key. Copy it — you'll need it in every request.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-line"></div>
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Subscribe on RapidAPI</h4>
+            <p>Choose a plan that fits your usage. The Free plan includes 500 requests/month — enough to test everything.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-line"></div>
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>Make your first request</h4>
+            <p>Pass both keys in the headers and you're live. See the example below.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:28px;">
+        <div class="code-tabs">
+          <button class="code-tab active" onclick="switchTab(this,'qs')">cURL</button>
+          <button class="code-tab" onclick="switchTab(this,'qs')">Python</button>
+          <button class="code-tab" onclick="switchTab(this,'qs')">JavaScript</button>
+        </div>
+        <div class="code-block" style="border-radius: 0 0 10px 10px;">
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          <div class="code-content active"><span class="fn">curl</span> <span class="str">"https://your-api.p.rapidapi.com/v1/search?searchQuery=Copacabana&category=restaurants"</span> \
+  <span class="kw">-H</span> <span class="str">"X-RapidAPI-Key: YOUR_RAPIDAPI_KEY"</span> \
+  <span class="kw">-H</span> <span class="str">"X-TripAdvisor-Key: YOUR_TA_KEY"</span></div>
+          <div class="code-content"><span class="kw">import</span> requests
+
+headers = {
+    <span class="str">"X-RapidAPI-Key"</span>: <span class="str">"YOUR_RAPIDAPI_KEY"</span>,
+    <span class="str">"X-TripAdvisor-Key"</span>: <span class="str">"YOUR_TA_KEY"</span>
+}
+
+response = requests.<span class="fn">get</span>(
+    <span class="str">"https://your-api.p.rapidapi.com/v1/search"</span>,
+    headers=headers,
+    params={<span class="str">"searchQuery"</span>: <span class="str">"Copacabana"</span>, <span class="str">"category"</span>: <span class="str">"restaurants"</span>}
+)
+
+<span class="fn">print</span>(response.<span class="fn">json</span>())</div>
+          <div class="code-content"><span class="kw">const</span> <span class="var">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(
+  <span class="str">"https://your-api.p.rapidapi.com/v1/search?searchQuery=Copacabana&category=restaurants"</span>,
+  {
+    headers: {
+      <span class="str">"X-RapidAPI-Key"</span>: <span class="str">"YOUR_RAPIDAPI_KEY"</span>,
+      <span class="str">"X-TripAdvisor-Key"</span>: <span class="str">"YOUR_TA_KEY"</span>
+    }
+  }
+);
+<span class="kw">const</span> <span class="var">data</span> = <span class="kw">await</span> <span class="var">res</span>.<span class="fn">json</span>();
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="var">data</span>);</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENDPOINTS -->
+    <div class="section" id="ep-search">
+      <div class="section-header">
+        <span class="section-number">04</span>
+        <h2 class="section-title">Endpoints</h2>
+      </div>
+
+      <!-- LOCATION SEARCH -->
+      <div class="endpoint-card" id="ep-search">
+        <div class="endpoint-header" onclick="toggleEndpoint(this)">
+          <span class="method-pill get">GET</span>
+          <div class="endpoint-info">
+            <div class="endpoint-path">/v1/search</div>
+            <div class="endpoint-desc">Returns up to 10 locations matching a text query. Supports filtering by category, address, phone, and geographic radius.</div>
+            <div class="endpoint-tags">
+              <span class="tag tag-native">native</span>
+            </div>
+          </div>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="params-title">Query Parameters</div>
+          <table class="params-table">
+            <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            <tr><td><span class="param-name">searchQuery<span class="param-required">*</span></span></td><td><span class="param-type">string</span></td><td class="param-desc">Text to search — name, city, or address of the location</td></tr>
+            <tr><td><span class="param-name">category</span></td><td><span class="param-type">string</span></td><td class="param-desc">Filter by type: <code>hotels</code>, <code>attractions</code>, <code>restaurants</code>, <code>geos</code></td></tr>
+            <tr><td><span class="param-name">phone</span></td><td><span class="param-type">string</span></td><td class="param-desc">Phone number to narrow results (without the + prefix)</td></tr>
+            <tr><td><span class="param-name">address</span></td><td><span class="param-type">string</span></td><td class="param-desc">Address string to filter results</td></tr>
+            <tr><td><span class="param-name">latLong</span></td><td><span class="param-type">string</span></td><td class="param-desc">Lat/Long pair to bias results geographically — e.g. <code>-22.9068,-43.1729</code></td></tr>
+            <tr><td><span class="param-name">radius</span></td><td><span class="param-type">number</span></td><td class="param-desc">Search radius from latLong point</td></tr>
+            <tr><td><span class="param-name">radiusUnit</span></td><td><span class="param-type">string</span></td><td class="param-desc">Unit for radius: <code>km</code>, <code>mi</code>, <code>m</code></td></tr>
+            <tr><td><span class="param-name">language</span></td><td><span class="param-type">string</span></td><td class="param-desc">Response language code. Default: <code>en</code>. Supports 45 languages including <code>pt</code> (Portuguese)</td></tr>
+          </table>
+
+          <div class="params-title" style="margin-top:20px;">Response Example</div>
+          <div class="response-block">
+            <div class="response-header">
+              <span class="status-200">200</span>
+              <span style="color:var(--muted);">GET /v1/search?searchQuery=Ipanema&category=restaurants</span>
+            </div>
+            <div class="response-body"><span class="key">{
+  "data"</span>: [
+    <span class="key">{
+      "location_id"</span>: <span class="str">"12345678"</span>,
+      <span class="key">"name"</span>: <span class="str">"Restaurante Garota de Ipanema"</span>,
+      <span class="key">"distance"</span>: <span class="str">"0.0"</span>,
+      <span class="key">"bearing"</span>: <span class="str">"north"</span>,
+      <span class="key">"address_obj"</span>: {
+        <span class="key">"street1"</span>: <span class="str">"Rua Vinicius de Moraes, 49"</span>,
+        <span class="key">"city"</span>: <span class="str">"Rio de Janeiro"</span>,
+        <span class="key">"country"</span>: <span class="str">"Brazil"</span>,
+        <span class="key">"address_string"</span>: <span class="str">"Rua Vinicius de Moraes, 49, Rio de Janeiro"</span>
+      }
+    }<span class="cm">  // ...up to 10 results</span>
+  ]
+}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEARBY SEARCH -->
+      <div class="endpoint-card" id="ep-nearby">
+        <div class="endpoint-header" onclick="toggleEndpoint(this)">
+          <span class="method-pill get">GET</span>
+          <div class="endpoint-info">
+            <div class="endpoint-path">/v1/nearby</div>
+            <div class="endpoint-desc">Returns up to 10 locations near a given latitude/longitude. Ideal for "near me" features in mobile apps.</div>
+            <div class="endpoint-tags"><span class="tag tag-native">native</span></div>
+          </div>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="endpoint-body">
+          <table class="params-table">
+            <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            <tr><td><span class="param-name">latLong<span class="param-required">*</span></span></td><td><span class="param-type">string</span></td><td class="param-desc">Lat/Long pair — e.g. <code>-22.9068,-43.1729</code></td></tr>
+            <tr><td><span class="param-name">category</span></td><td><span class="param-type">string</span></td><td class="param-desc"><code>hotels</code>, <code>attractions</code>, <code>restaurants</code>, <code>geos</code></td></tr>
+            <tr><td><span class="param-name">radius</span></td><td><span class="param-type">string</span></td><td class="param-desc">Search radius from coordinate</td></tr>
+            <tr><td><span class="param-name">radiusUnit</span></td><td><span class="param-type">string</span></td><td class="param-desc"><code>km</code>, <code>mi</code>, <code>m</code></td></tr>
+            <tr><td><span class="param-name">phone</span></td><td><span class="param-type">string</span></td><td class="param-desc">Optional phone filter</td></tr>
+            <tr><td><span class="param-name">address</span></td><td><span class="param-type">string</span></td><td class="param-desc">Optional address filter</td></tr>
+            <tr><td><span class="param-name">language</span></td><td><span class="param-type">string</span></td><td class="param-desc">Default: <code>en</code></td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- LOCATION DETAILS -->
+      <div class="endpoint-card" id="ep-details">
+        <div class="endpoint-header" onclick="toggleEndpoint(this)">
+          <span class="method-pill get">GET</span>
+          <div class="endpoint-info">
+            <div class="endpoint-path">/v1/location/<span class="path-param">{locationId}</span></div>
+            <div class="endpoint-desc">Full details for a location: name, description, coordinates, phone, website, rating, ranking, subratings, hours, cuisine, features, and more.</div>
+            <div class="endpoint-tags"><span class="tag tag-native">native</span></div>
+          </div>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="params-title">Path Parameters</div>
+          <table class="params-table">
+            <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            <tr><td><span class="param-name">locationId<span class="param-required">*</span></span></td><td><span class="param-type">integer</span></td><td class="param-desc">TripAdvisor location ID. Obtain from /search or /nearby endpoints.</td></tr>
+          </table>
+          <div class="params-title">Query Parameters</div>
+          <table class="params-table">
+            <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            <tr><td><span class="param-name">language</span></td><td><span class="param-type">string</span></td><td class="param-desc">Response language. Default: <code>en</code></td></tr>
+            <tr><td><span class="param-name">currency</span></td><td><span class="param-type">string</span></td><td class="param-desc">Currency code (ISO 4217). Default: <code>USD</code>. Use <code>BRL</code> for Brazilian Real.</td></tr>
+          </table>
+
+          <div class="params-title">Response Fields</div>
+          <table class="params-table">
+            <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+            <tr><td><span class="param-name">location_id</span></td><td><span class="param-type">string</span></td><td class="param-desc">Unique TripAdvisor identifier</td></tr>
+            <tr><td><span class="param-name">name</span></td><td><span class="param-type">string</span></td><td class="param-desc">Location name</td></tr>
+            <tr><td><span class="param-name">description</span></td><td><span class="param-type">string</span></td><td class="param-desc">Full description text</td></tr>
+            <tr><td><span class="param-name">rating</span></td><td><span class="param-type">string</span></td><td class="param-desc">Overall rating (0.0–5.0)</td></tr>
+            <tr><td><span class="param-name">num_reviews</span></td><td><span class="param-type">string</span></td><td class="param-desc">Total review count</td></tr>
+            <tr><td><span class="param-name">ranking_data</span></td><td><span class="param-type">object</span></td><td class="param-desc">Ranking string, geo name, position, and total count</td></tr>
+            <tr><td><span class="param-name">subratings</span></td><td><span class="param-type">object</span></td><td class="param-desc">Category ratings: food, service, value, atmosphere</td></tr>
+            <tr><td><span class="param-name">hours</span></td><td><span class="param-type">object</span></td><td class="param-desc">Weekly schedule with open/close times per day</td></tr>
+            <tr><td><span class="param-name">features</span></td><td><span class="param-type">array</span></td><td class="param-desc">Amenities: Full Bar, Outdoor Seating, Wheelchair Accessible, etc.</td></tr>
+            <tr><td><span class="param-name">cuisine</span></td><td><span class="param-type">array</span></td><td class="param-desc">Cuisine types (restaurants only)</td></tr>
+            <tr><td><span class="param-name">price_level</span></td><td><span class="param-type">string</span></td><td class="param-desc">Price tier: $, $$, $$$, $$$$</td></tr>
+            <tr><td><span class="param-name">web_url</span></td><td><span class="param-type">string</span></td><td class="param-desc">Direct TripAdvisor listing URL</td></tr>
+            <tr><td><span class="param-name">latitude / longitude</span></td><td><span class="param-type">string</span></td><td class="param-desc">Exact coordinates</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- LOCATION PHOTOS -->
+      <div class="endpoint-card" id="ep-photos">
+        <div class="endpoint-header" onclick="toggleEndpoint(this)">
+          <span class="method-pill get">GET</span>
+          <div class="endpoint-info">
+            <div class="endpoint-path">/v1/location/<span class="path-param">{locationId}</span>/photos</div>
+            <div class="endpoint-desc">Returns up to 5 recent photos for a location. Each photo includes 5 size variants from thumbnail (50px) to original resolution.</div>
+            <div class="endpoint-tags"><span class="tag tag-native">native</span></div>
+          </div>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="params-title">Path Parameters</div>
+          <table class="params-table">
+            <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            <tr><td><span class="param-name">locationId<span class="param-required">*</span></span></td><td><span class="param-type">integer</span></td><td class="param-desc">TripAdvisor location ID</td></tr>
+          </table>
+          <div class="params-title">Query Parameters</div>
+          <table class="params-table">
+            <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            <tr><td><span class="param-name">limit</span></td><td><span class="param-type">number</span></td><td class="param-desc">Number of photos to return (max 5)</td></tr>
+            <tr><td><span class="param-name">offset</span></td><td><span class="param-type">number</span></td><td class="param-desc">Pagination offset</td></tr>
+            <tr><td><span class="param-name">source</span></td><td><span class="param-type">string</span></td><td class="param-desc">Filter by source: <code>Expert</code>, <code>Management</code>, <code>Traveler</code>. Leave empty for all.</td></tr>
+            <tr><td><span class="param-name">language</span></td><td><span class="param-type">string</span></td><td class="param-desc">Default: <code>en</code></td></tr>
+          </table>
+          <div class="params-title">Photo Size Variants</div>
+          <table class="params-table">
+            <tr><th>Size</th><th>Dimensions</th><th>Use Case</th></tr>
+            <tr><td><span class="param-name">thumbnail</span></td><td><span class="param-type">50×50px</span></td><td class="param-desc">Avatars, list icons</td></tr>
+            <tr><td><span class="param-name">small</span></td><td><span class="param-type">150×150px</span></td><td class="param-desc">Grid thumbnails</td></tr>
+            <tr><td><span class="param-name">medium</span></td><td><span class="param-type">max 250px</span></td><td class="param-desc">Card images, previews</td></tr>
+            <tr><td><span class="param-name">large</span></td><td><span class="param-type">max 550px</span></td><td class="param-desc">Detail pages</td></tr>
+            <tr><td><span class="param-name">original</span></td><td><span class="param-type">full res</span></td><td class="param-desc">Full-screen, downloads</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- LOCATION REVIEWS -->
+      <div class="endpoint-card" id="ep-reviews">
+        <div class="endpoint-header" onclick="toggleEndpoint(this)">
+          <span class="method-pill get">GET</span>
+          <div class="endpoint-info">
+            <div class="endpoint-path">/v1/location/<span class="path-param">{locationId}</span>/reviews</div>
+            <div class="endpoint-desc">Returns up to 5 most recent reviews. Each review includes full text, rating, subratings, trip type, travel date, and reviewer profile.</div>
+            <div class="endpoint-tags"><span class="tag tag-native">native</span></div>
+          </div>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="params-title">Path Parameters</div>
+          <table class="params-table">
+            <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            <tr><td><span class="param-name">locationId<span class="param-required">*</span></span></td><td><span class="param-type">integer</span></td><td class="param-desc">TripAdvisor location ID</td></tr>
+          </table>
+          <div class="params-title">Query Parameters</div>
+          <table class="params-table">
+            <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            <tr><td><span class="param-name">limit</span></td><td><span class="param-type">number</span></td><td class="param-desc">Number of reviews (max 5)</td></tr>
+            <tr><td><span class="param-name">offset</span></td><td><span class="param-type">number</span></td><td class="param-desc">Pagination offset</td></tr>
+            <tr><td><span class="param-name">language</span></td><td><span class="param-type">string</span></td><td class="param-desc">Filter by review language. Default: <code>en</code></td></tr>
+          </table>
+          <div class="params-title">Review Object Fields</div>
+          <table class="params-table">
+            <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+            <tr><td><span class="param-name">id</span></td><td><span class="param-type">integer</span></td><td class="param-desc">Unique review ID</td></tr>
+            <tr><td><span class="param-name">rating</span></td><td><span class="param-type">integer</span></td><td class="param-desc">Overall rating (1–5)</td></tr>
+            <tr><td><span class="param-name">title</span></td><td><span class="param-type">string</span></td><td class="param-desc">Review headline</td></tr>
+            <tr><td><span class="param-name">text</span></td><td><span class="param-type">string</span></td><td class="param-desc">Full review body</td></tr>
+            <tr><td><span class="param-name">trip_type</span></td><td><span class="param-type">string</span></td><td class="param-desc">Business, Couples, Family, Friends, Solo</td></tr>
+            <tr><td><span class="param-name">travel_date</span></td><td><span class="param-type">string</span></td><td class="param-desc">Month/year of visit</td></tr>
+            <tr><td><span class="param-name">subratings</span></td><td><span class="param-type">object</span></td><td class="param-desc">Per-dimension ratings when available</td></tr>
+            <tr><td><span class="param-name">user</span></td><td><span class="param-type">object</span></td><td class="param-desc">Username, location, and avatar URLs</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPOSITE ENDPOINTS -->
+    <div class="section" id="ep-full">
+      <div class="section-header">
+        <span class="section-number">05</span>
+        <h2 class="section-title">Composite Endpoints</h2>
+      </div>
+
+      <div class="alert alert-info">
+        <span class="alert-icon">⚡</span>
+        <div>Composite endpoints combine multiple TripAdvisor calls into a single request, reducing your API usage and simplifying your code. These are exclusive to this gateway.</div>
+      </div>
+
+      <!-- LOCATION FULL -->
+      <div class="endpoint-card">
+        <div class="endpoint-header" onclick="toggleEndpoint(this)">
+          <span class="method-pill get">GET</span>
+          <div class="endpoint-info">
+            <div class="endpoint-path">/v1/location/<span class="path-param">{locationId}</span>/full</div>
+            <div class="endpoint-desc">Returns Details + Photos + Reviews in a single call. Replaces 3 separate requests. Essential for location detail pages and dashboards.</div>
+            <div class="endpoint-tags">
+              <span class="tag tag-composite">⚡ composite</span>
+              <span class="tag tag-byok">3-in-1</span>
+            </div>
+          </div>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="alert alert-warn" style="margin-top:16px;">
+            <span class="alert-icon">💡</span>
+            <div>This endpoint counts as <strong>3 requests</strong> against your TripAdvisor quota (one per underlying call), but as <strong>1 request</strong> against your RapidAPI plan.</div>
+          </div>
+
+          <div class="params-title">Query Parameters</div>
+          <table class="params-table">
+            <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            <tr><td><span class="param-name">locationId<span class="param-required">*</span></span></td><td><span class="param-type">integer</span></td><td class="param-desc">TripAdvisor location ID</td></tr>
+            <tr><td><span class="param-name">language</span></td><td><span class="param-type">string</span></td><td class="param-desc">Applied to all 3 calls. Default: <code>en</code></td></tr>
+            <tr><td><span class="param-name">currency</span></td><td><span class="param-type">string</span></td><td class="param-desc">Applied to Details call. Default: <code>USD</code></td></tr>
+            <tr><td><span class="param-name">photo_source</span></td><td><span class="param-type">string</span></td><td class="param-desc">Filter photos by source: <code>Expert</code>, <code>Management</code>, <code>Traveler</code></td></tr>
+          </table>
+
+          <div class="params-title">Response Structure</div>
+          <div class="response-block">
+            <div class="response-header">
+              <span class="status-200">200</span>
+              <span style="color:var(--muted);">GET /v1/location/323301/full</span>
+            </div>
+            <div class="response-body"><span class="key">{
+  "location_id"</span>: <span class="str">"323301"</span>,
+  <span class="key">"details"</span>: { <span class="cm">/* full Location Details object */</span> },
+  <span class="key">"photos"</span>: { <span class="cm">/* Location Photos response */</span> },
+  <span class="key">"reviews"</span>: { <span class="cm">/* Location Reviews response */</span> },
+  <span class="key">"_meta"</span>: {
+    <span class="key">"calls_made"</span>: <span class="num">3</span>,
+    <span class="key">"fetched_at"</span>: <span class="str">"2025-03-04T14:32:00Z"</span>
+  }
+}</div>
+          </div>
+
+          <div class="code-tabs" style="margin-top:16px;">
+            <button class="code-tab active" onclick="switchTab(this,'full')">JavaScript</button>
+            <button class="code-tab" onclick="switchTab(this,'full')">Python</button>
+          </div>
+          <div class="code-block">
+            <div class="code-content active"><span class="cm">// One call to get everything you need for a detail page</span>
+<span class="kw">const</span> <span class="var">data</span> = <span class="kw">await</span> <span class="fn">fetch</span>(
+  <span class="str">`https://your-api.p.rapidapi.com/v1/location/<span class="var">${locationId}</span>/full?language=pt&currency=BRL`</span>,
+  { headers: { <span class="str">"X-RapidAPI-Key"</span>: KEY, <span class="str">"X-TripAdvisor-Key"</span>: TA_KEY } }
+).<span class="fn">then</span>(<span class="var">r</span> => <span class="var">r</span>.<span class="fn">json</span>());
+
+<span class="cm">// Use immediately — details, photos, and reviews all ready</span>
+<span class="kw">const</span> { <span class="var">details</span>, <span class="var">photos</span>, <span class="var">reviews</span> } = <span class="var">data</span>;</div>
+            <div class="code-content">headers = {
+    <span class="str">"X-RapidAPI-Key"</span>: KEY,
+    <span class="str">"X-TripAdvisor-Key"</span>: TA_KEY
+}
+
+data = requests.<span class="fn">get</span>(
+    <span class="fn">f</span><span class="str">"https://your-api.p.rapidapi.com/v1/location/{location_id}/full"</span>,
+    headers=headers, params={<span class="str">"language"</span>: <span class="str">"pt"</span>, <span class="str">"currency"</span>: <span class="str">"BRL"</span>}
+).<span class="fn">json</span>()
+
+details = data[<span class="str">"details"</span>]
+photos  = data[<span class="str">"photos"</span>]
+reviews = data[<span class="str">"reviews"</span>]</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEARCH FULL -->
+      <div class="endpoint-card" id="ep-searchfull">
+        <div class="endpoint-header" onclick="toggleEndpoint(this)">
+          <span class="method-pill get">GET</span>
+          <div class="endpoint-info">
+            <div class="endpoint-path">/v1/search/full</div>
+            <div class="endpoint-desc">Searches for a location by name and returns full Details for the top result in a single call. Perfect for "lookup by name" use cases.</div>
+            <div class="endpoint-tags">
+              <span class="tag tag-composite">⚡ composite</span>
+              <span class="tag tag-byok">2-in-1</span>
+            </div>
+          </div>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="params-title">Query Parameters</div>
+          <table class="params-table">
+            <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            <tr><td><span class="param-name">searchQuery<span class="param-required">*</span></span></td><td><span class="param-type">string</span></td><td class="param-desc">Name or address to search</td></tr>
+            <tr><td><span class="param-name">category</span></td><td><span class="param-type">string</span></td><td class="param-desc"><code>hotels</code>, <code>attractions</code>, <code>restaurants</code>, <code>geos</code></td></tr>
+            <tr><td><span class="param-name">language</span></td><td><span class="param-type">string</span></td><td class="param-desc">Default: <code>en</code></td></tr>
+            <tr><td><span class="param-name">currency</span></td><td><span class="param-type">string</span></td><td class="param-desc">Default: <code>USD</code></td></tr>
+          </table>
+
+          <div class="params-title">Response Structure</div>
+          <div class="response-block">
+            <div class="response-header"><span class="status-200">200</span></div>
+            <div class="response-body"><span class="key">{
+  "query"</span>: <span class="str">"Copacabana Palace"</span>,
+  <span class="key">"matched_location_id"</span>: <span class="str">"300198"</span>,
+  <span class="key">"details"</span>: { <span class="cm">/* full Location Details for top result */</span> },
+  <span class="key">"_meta"</span>: {
+    <span class="key">"calls_made"</span>: <span class="num">2</span>,
+    <span class="key">"fetched_at"</span>: <span class="str">"2025-03-04T14:32:00Z"</span>
+  }
+}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ERRORS -->
+    <div class="section" id="errors">
+      <div class="section-header">
+        <span class="section-number">06</span>
+        <h2 class="section-title">Error Handling</h2>
+      </div>
+
+      <p style="color:var(--muted); margin-bottom:20px; font-size:14px;">All errors follow a standard structure with a human-readable message and an error code.</p>
+
+      <div class="response-block" style="margin-bottom:20px;">
+        <div class="response-header"><span style="color:var(--red); font-family:'JetBrains Mono',monospace; font-weight:700;">4xx / 5xx</span> <span style="color:var(--muted);">Error Response Structure</span></div>
+        <div class="response-body"><span class="key">{
+  "error"</span>: {
+    <span class="key">"code"</span>: <span class="str">"INVALID_TA_KEY"</span>,
+    <span class="key">"message"</span>: <span class="str">"Your TripAdvisor API key is invalid or expired."</span>,
+    <span class="key">"docs"</span>: <span class="str">"https://tripadvisor.com/developers"</span>
+  }
+}</div>
+      </div>
+
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:20px;">
+        <div class="error-row">
+          <span class="error-code e400">400</span>
+          <div><strong>BAD_REQUEST</strong> — <span style="color:var(--muted)">Missing required parameter (e.g. searchQuery or latLong)</span></div>
+        </div>
+        <div class="error-row">
+          <span class="error-code e401">401</span>
+          <div><strong>INVALID_TA_KEY</strong> — <span style="color:var(--muted)">TripAdvisor key missing, invalid, or expired</span></div>
+        </div>
+        <div class="error-row">
+          <span class="error-code e401">401</span>
+          <div><strong>INVALID_RAPIDAPI_KEY</strong> — <span style="color:var(--muted)">RapidAPI subscription key is invalid</span></div>
+        </div>
+        <div class="error-row">
+          <span class="error-code e429">429</span>
+          <div><strong>TA_RATE_LIMIT</strong> — <span style="color:var(--muted)">Your TripAdvisor key exceeded its rate limit (50 req/s). Retry after 1 second.</span></div>
+        </div>
+        <div class="error-row">
+          <span class="error-code e429">429</span>
+          <div><strong>PLAN_LIMIT</strong> — <span style="color:var(--muted)">Your RapidAPI plan monthly request limit reached</span></div>
+        </div>
+        <div class="error-row">
+          <span class="error-code e500">500</span>
+          <div><strong>UPSTREAM_ERROR</strong> — <span style="color:var(--muted)">TripAdvisor API returned an unexpected error. Usually transient — retry with exponential backoff.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRICING -->
+    <div class="section" id="pricing">
+      <div class="section-header">
+        <span class="section-number">07</span>
+        <h2 class="section-title">Plans & Pricing</h2>
+      </div>
+
+      <div class="alert alert-info">
+        <span class="alert-icon">💡</span>
+        <div>Request counts refer to RapidAPI plan requests. Composite endpoints count as 1 RapidAPI request regardless of how many TripAdvisor calls they make internally.</div>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-plan">Free</div>
+          <div class="price-value">$0</div>
+          <div class="price-period">forever</div>
+          <div class="price-requests">500 req/month</div>
+          <div class="price-note">All 7 endpoints included</div>
+        </div>
+        <div class="price-card">
+          <div class="price-plan">Basic</div>
+          <div class="price-value">$9</div>
+          <div class="price-period">per month</div>
+          <div class="price-requests">15,000 req/month</div>
+          <div class="price-note">Side projects & MVPs</div>
+        </div>
+        <div class="price-card featured">
+          <div class="price-plan">Pro ⭐</div>
+          <div class="price-value">$25</div>
+          <div class="price-period">per month</div>
+          <div class="price-requests">60,000 req/month</div>
+          <div class="price-note">Most popular plan</div>
+        </div>
+        <div class="price-card">
+          <div class="price-plan">Ultra</div>
+          <div class="price-value">$59</div>
+          <div class="price-period">per month</div>
+          <div class="price-requests">200,000 req/month</div>
+          <div class="price-note">Production & scale</div>
+        </div>
+      </div>
+
+      <p style="color:var(--muted); font-size:13px; margin-top:20px;">Need higher volume? Contact us for a custom Enterprise plan with dedicated support and SLA guarantees.</p>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<script>
+function toggleEndpoint(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+
+function switchTab(btn, group) {
+  const tabs = btn.parentElement.querySelectorAll('.code-tab');
+  const codeBlock = btn.parentElement.nextElementSibling;
+  const contents = codeBlock.querySelectorAll('.code-content');
+  const idx = Array.from(tabs).indexOf(btn);
+  tabs.forEach(t => t.classList.remove('active'));
+  contents.forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  if (contents[idx]) contents[idx].classList.add('active');
+}
+
+function copyCode(btn) {
+  const block = btn.parentElement;
+  const active = block.querySelector('.code-content.active') || block.querySelector('.code-content');
+  const text = active ? active.innerText : '';
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 1500);
+  });
+}
+
+// Sidebar active state on scroll
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', function() {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// Open first endpoint by default
+document.querySelector('.endpoint-header').click();
+</script>
+</body>
+</html>
