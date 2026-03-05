@@ -864,7 +864,7 @@
 
       <div class="base-url-box">
         <span class="base-url-label">Base URL</span>
-        <span class="base-url-value">https://your-api.p.rapidapi.com/v1</span>
+        <span class="base-url-value">https://tripadvisor-gateway-api1.p.rapidapi.com</span>
       </div>
 
       <p style="color:var(--muted); font-size:14px;">All requests use <strong style="color:var(--text)">HTTPS</strong> and return <strong style="color:var(--text)">JSON</strong>. The TripAdvisor key is passed in every request via the <span class="inline-code">X-TripAdvisor-Key</span> header.</p>
@@ -958,7 +958,7 @@
         </div>
         <div class="code-block" style="border-radius: 0 0 10px 10px;">
           <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-          <div class="code-content active"><span class="fn">curl</span> <span class="str">"https://your-api.p.rapidapi.com/v1/search?searchQuery=Copacabana&category=restaurants"</span> \
+          <div class="code-content active"><span class="fn">curl</span> <span class="str">"https://tripadvisor-gateway-api1.p.rapidapi.com/search?searchQuery=Copacabana&category=restaurants"</span> \
   <span class="kw">-H</span> <span class="str">"X-RapidAPI-Key: YOUR_RAPIDAPI_KEY"</span> \
   <span class="kw">-H</span> <span class="str">"X-TripAdvisor-Key: YOUR_TA_KEY"</span></div>
           <div class="code-content"><span class="kw">import</span> requests
@@ -969,14 +969,14 @@ headers = {
 }
 
 response = requests.<span class="fn">get</span>(
-    <span class="str">"https://your-api.p.rapidapi.com/v1/search"</span>,
+    <span class="str">"https://tripadvisor-gateway-api1.p.rapidapi.com/search"</span>,
     headers=headers,
     params={<span class="str">"searchQuery"</span>: <span class="str">"Copacabana"</span>, <span class="str">"category"</span>: <span class="str">"restaurants"</span>}
 )
 
 <span class="fn">print</span>(response.<span class="fn">json</span>())</div>
           <div class="code-content"><span class="kw">const</span> <span class="var">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(
-  <span class="str">"https://your-api.p.rapidapi.com/v1/search?searchQuery=Copacabana&category=restaurants"</span>,
+  <span class="str">"https://tripadvisor-gateway-api1.p.rapidapi.com/search?searchQuery=Copacabana&category=restaurants"</span>,
   {
     headers: {
       <span class="str">"X-RapidAPI-Key"</span>: <span class="str">"YOUR_RAPIDAPI_KEY"</span>,
@@ -1262,7 +1262,7 @@ response = requests.<span class="fn">get</span>(
           <div class="code-block">
             <div class="code-content active"><span class="cm">// One call to get everything you need for a detail page</span>
 <span class="kw">const</span> <span class="var">data</span> = <span class="kw">await</span> <span class="fn">fetch</span>(
-  <span class="str">`https://your-api.p.rapidapi.com/v1/location/<span class="var">${locationId}</span>/full?language=pt&currency=BRL`</span>,
+  <span class="str">`https://tripadvisor-gateway-api1.p.rapidapi.com/location/<span class="var">${locationId}</span>/full?language=pt&currency=BRL`</span>,
   { headers: { <span class="str">"X-RapidAPI-Key"</span>: KEY, <span class="str">"X-TripAdvisor-Key"</span>: TA_KEY } }
 ).<span class="fn">then</span>(<span class="var">r</span> => <span class="var">r</span>.<span class="fn">json</span>());
 
@@ -1274,7 +1274,7 @@ response = requests.<span class="fn">get</span>(
 }
 
 data = requests.<span class="fn">get</span>(
-    <span class="fn">f</span><span class="str">"https://your-api.p.rapidapi.com/v1/location/{location_id}/full"</span>,
+    <span class="fn">f</span><span class="str">"https://tripadvisor-gateway-api1.p.rapidapi.com/location/{location_id}/full"</span>,
     headers=headers, params={<span class="str">"language"</span>: <span class="str">"pt"</span>, <span class="str">"currency"</span>: <span class="str">"BRL"</span>}
 ).<span class="fn">json</span>()
 
